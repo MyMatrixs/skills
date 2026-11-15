@@ -1,0 +1,6 @@
+interface:
+  display_name: "AI Video Production"
+  short_description: "Create traceable AI-video projects through picture and sound"
+  default_prompt: "Use $ai-video-production to create a traceable AI-video project from brief through approved audiovisual shot results."
+policy:
+  allow_implicit_invocation: true

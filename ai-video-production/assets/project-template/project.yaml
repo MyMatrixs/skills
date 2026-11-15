@@ -1,0 +1,21 @@
+project:
+  id: "{{PROJECT_ID}}"
+  title: "{{PROJECT_TITLE}}"
+  created_at: "{{CREATED_AT}}"
+delivery:
+  aspect_ratio: "{{ASPECT_RATIO}}"
+  fps: {{FPS}}
+  target_duration_seconds: {{DURATION_SECONDS}}
+workflow:
+  approved_versions:
+    brief: null
+    script: null
+    storyboard: null
+  approved_assets:
+    characters: []
+    scenes: []
+    shot_videos: []
+    audio_assets: []
+    picture_sound_edits: []
+    masters: []
+  current_stage: "01_brief"

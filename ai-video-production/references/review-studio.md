@@ -1,0 +1,23 @@
+# Review studio and feedback handoff
+
+This reference describes the current React + Node review studio at `<workspace>/ai-video-review-studio`. It is a **local** service, normally `http://127.0.0.1:4317/`; do not describe it as publicly hosted or change its network exposure without a separate user request. Read its README and check `/api/health` before use. Build with `npm run build`, start with `npm start`, and use the configured `VIDEO_PROJECT_ROOT` if the intended project is not the default.
+
+## Align the version before collecting feedback
+
+The current app loads its assembled master and numbered video from the v003 paths in `server/catalog.ts`. It scans shot run directories when the server catalog loads. The top `↻ 同步素材` button refreshes browser data from that catalog; it does **not** ask the server to rescan the filesystem. After generating new candidates, use the project's server sync endpoint (or restart the service), then refresh the browser and confirm each run ID appears.
+
+A newly generated clean or numbered MP4 is not automatically the app's player source. Before timecoded review of a new master, register that master, its numbered counterpart, and its 36-segment timing/index together in the app, or use the standalone numbered MP4 plus its matching number index and collect feedback by segment/shot ID. The current v003 baseline uses database ID `baseline-v003`, preserving older edit drafts. Candidate selection alone records a preference; it does not swap footage in the assembled player or an edit version.
+
+## User review path
+
+1. Open **审片与反馈**. Pick a numbered segment on the left. The numbered master and `隐藏编号` control show the same current baseline; the source player below it isolates the current segment. Cards and the three S07-003 telephone units have their own numbers. Use the number index belonging to this exact master.
+2. For spoken segments, press **清晰** or **听不清** as a quick whole-shot verdict. For a local problem, select the actual candidate/run on the right, enter a start/end range measured from that candidate's start, choose speaker and issue tag, and record expected versus heard words. Use **保存时段标注**. Distinguish a bad native take from an edit transition or mix problem.
+3. Use the dimension verdict for expression, spatial relationships, prop/text orientation, rain logic, mouth sync, and overall fit. A/B comparison plays two source candidates. The waveform and level tools are clues, not substitutes for listening.
+4. The prompt panel defaults to **中文审阅**. This is read-only review copy tied to the newest packet input's English prompt hash (currently v007). **English 生成** shows the editable model input; Chinese is allowed there only inside `「...」` for exact dialogue or visible scene text. The app warns when the Chinese review copy no longer matches a changed English draft. The app does not edit the Chinese translation: the producing agent must update the packet's review copy and source hash before submitting the revised English input.
+5. **载入 v007 场景描述输入** only changes the browser draft; if a saved user draft exists, it remains the default until the user loads the new baseline. The keyframe panel shows the current production first frame above historical candidate first frames. **保存英文新版本** creates a prompt revision and preserves earlier prompts. Dialogue revisions and replacement first-frame uploads are separate versioned records. **准备再生成输入包** requires a saved English prompt revision and image; it writes a local JSON packet and does not start a GPU or submit a job.
+6. **剪辑与版本** starts from a read-only baseline. **派生可编辑草稿**, adjust selected source, trim, order, gain, fades, crop, or text card, then **保存草稿版本** before **导出低清审片版**. The ruling card requires explicit source confirmation when its wording changes. **导出记录** shows local renders and previews.
+7. **对白质量分析** summarizes feedback and input metrics after reviewers have entered listening judgments. Use it to prioritize shots, not to declare words correct from volume alone. **导出反馈快照** saves reviews, annotations, prompt/script revisions, candidate choices, edit versions, and render jobs under `10_review_studio/exports/`.
+
+## Production response to feedback
+
+Read the exported snapshot together with the exact master/version manifest. Convert each finding to a shot ID, run ID, local time range, and failure category: prompt, first frame, native speech, generated text, mix, or edit. Inspect the cited candidate and relevant references; revise only the failed component. Preserve the accepted take and old master. Before giving the user a new preview, sync new candidate runs and verify that the preview link or app player, displayed numbering, and feedback target all point to the same version.
